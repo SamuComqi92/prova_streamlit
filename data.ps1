@@ -1,16 +1,20 @@
-# Generate sample data
-$data = @"
-Name,Age,Country
-John,25,USA
-Jane,30,UK
-Alex,28,Canada
-"@
+# Import the module
+Import-Module -Name MicrosoftPowerBIMgmt
 
-# Convert data to objects
-$objects = $data | ConvertFrom-Csv
+# Authenticate to Power BI
+Connect-PowerBIServiceAccount
 
-# Format the data and convert it to a string
-$output = $objects | Format-Table | Out-String
+# Specify the workspace ID of the desired workspace
+$workspaceId = "your_workspace_id"
 
-# Print the output on the screen
-Write-Output $output
+# Retrieve reports from the specified workspace
+$reports = Get-PowerBIReport -WorkspaceId $workspaceId
+
+# Specify the output file path and name for the CSV file
+$csvFilePath = "output.csv"
+
+# Export the reports to a CSV file
+$reports | Export-Csv -Path $csvFilePath -NoTypeInformation
+
+# Confirmation message
+Write-Host "Reports saved to $csvFilePath"
