@@ -1,23 +1,34 @@
-import streamlit as st
-import pandas as pd
 import subprocess
+import streamlit as st
 
-# Execute PowerShell script and capture the output
-result = subprocess.run(["powershell", "data.ps1"], shell=True, capture_output=True, text=True)
+def execute_powershell_script(script_path):
+    # Run PowerShell script
+    process = subprocess.Popen(["powershell", "data.ps1"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    output, error = process.communicate()
 
-# Check if the PowerShell script executed successfully
-if result.returncode == 0:
-    # Convert the output to a string
-    output = result.decode("utf-8")
-    
-    # Parse the CSV data and create a pandas DataFrame
-    df = pd.read_csv(pd.compat.StringIO(output))
-    
-    # Display the DataFrame using Streamlit
-    st.dataframe(df)
-else:
-    # Display the error message
-    error_message = result.stderr if result.stderr else result.stdout
-    st.error(f"PowerShell script execution failed:\n{error_message}")
+    # Decode the output
+    output = output.decode("utf-8")
+    error = error.decode("utf-8")
 
+    return output, error
 
+# Streamlit app
+st.title("PowerShell Script Execution")
+
+# Upload the PowerShell script
+script_file = st.file_uploader("Upload PowerShell Script", type=".ps1")
+
+if script_file is not None:
+    # Save the uploaded script to a temporary file
+    with open("temp_script.ps1", "wb") as f:
+        f.write(script_file.read())
+
+    # Execute the PowerShell script
+    output, error = execute_powershell_script("temp_script.ps1")
+
+    # Display the output and error
+    st.subheader("Output:")
+    st.code(output)
+
+    st.subheader("Error:")
+    st.code(error)
