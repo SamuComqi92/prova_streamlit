@@ -1,5 +1,3 @@
-# data.ps1
-
 # Generate sample data
 $data = @"
 Name,Age,Country
@@ -8,5 +6,11 @@ Jane,30,UK
 Alex,28,Canada
 "@
 
-# Save data as a CSV file
-$data | ConvertFrom-Csv | Export-Csv -Path "data.csv" -NoTypeInformation
+# Convert data to objects
+$objects = $data | ConvertFrom-Csv
+
+# Format the data and convert it to a string
+$output = $objects | Format-Table | Out-String
+
+# Print the output on the screen
+Write-Output $output
