@@ -3,7 +3,7 @@ import pandas as pd
 import subprocess
 
 # Execute PowerShell script and capture the output
-result = subprocess.run(["powershell", "./data.ps1"], shell=True, capture_output=True, text=True)
+result = subprocess.run(["powershell", "data.ps1"], shell=True, capture_output=True, text=True)
 
 # Check if the PowerShell script executed successfully
 if result.returncode == 0:
