@@ -3,7 +3,7 @@ import streamlit as st
 
 def execute_powershell_script(script_path):
     # Run PowerShell script
-    process = subprocess.Popen(["powershell", "-File", script_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    process = subprocess.Popen(["powershell.exe", "-File", script_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     output, error = process.communicate()
 
     # Decode the output
